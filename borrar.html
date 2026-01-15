@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Borrar Explotación</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      display: flex; 
+      flex-direction: column;
+      justify-content: center; 
+      align-items: center; 
+      height: 100vh; 
+    }
+    button {
+      background-color: #be3d05;
+      color: white;
+      font-size: 18px;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover { opacity: 0.9; }
+    #mensaje {
+      margin-top: 15px;
+      color: green;
+      font-size: 16px;
+      display: none;
+    }
+    #mensaje.error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <button id="borrarBtn">Borrar Explotación</button>
+  <div id="mensaje"></div>
+
+  <script>
+    const boton = document.getElementById("borrarBtn");
+    const mensaje = document.getElementById("mensaje");
+
+    boton.addEventListener("click", async () => {
+      mensaje.style.display = "none";
+      try {
+        const response = await fetch("https://biobov.netlify.app/.netlify/functions/biobov_function?accion=borrar");
+        const data = await response.json();
+        mensaje.textContent = data.message || "Operación completada correctamente.";
+        mensaje.className = "";
+        mensaje.style.display = "block";
+        setTimeout(() => mensaje.style.display = "none", 4000);
+      } catch (err) {
+        mensaje.textContent = "Error al ejecutar la acción: " + err;
+        mensaje.className = "error";
+        mensaje.style.display = "block";
+        setTimeout(() => mensaje.style.display = "none", 5000);
+      }
+    });
+  </script>
+</body>
+</html>
